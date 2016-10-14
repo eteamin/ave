@@ -63,9 +63,9 @@ from ave.model.view import View
 from ave.model.vote import Vote
 from ave.model.post import Post
 from ave.model.post_type import PostType
-from ave.model.profile_view import ProfileView
+from ave.model.profile_viewer import ProfileViewer
 from ave.model.tag import Tag
 from ave.model.badge import Badge
 
 
-__all__ = ('User', 'Group', 'Permission', 'Account', 'View', 'Vote', 'Post', 'PostType', 'ProfileView', 'Tag', 'Badge')
+__all__ = ('User', 'Group', 'Permission', 'Account', 'View', 'Vote', 'Post', 'PostType', 'ProfileViewer', 'Tag', 'Badge')
