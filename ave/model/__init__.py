@@ -58,5 +58,14 @@ def init_model(engine):
 
 # Import your model modules here.
 from ave.model.auth import User, Group, Permission
+from ave.model.account import Account
+from ave.model.view import View
+from ave.model.vote import Vote
+from ave.model.post import Post
+from ave.model.post_type import PostType
+from ave.model.profile_view import ProfileView
+from ave.model.tag import Tag
+from ave.model.badge import Badge
 
-__all__ = ('User', 'Group', 'Permission')
+
+__all__ = ('User', 'Group', 'Permission', 'Account', 'View', 'Vote', 'Post', 'PostType', 'ProfileView', 'Tag', 'Badge')

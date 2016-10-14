@@ -23,7 +23,7 @@ class ProfileView(DeclarativeBase):
 
     viewer_account_id = Column(Integer, ForeignKey(
         'accounts.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
-    account = relationship('Account', backref=backref('views'))
+    account = relationship('Account', backref=backref('profile_views'))
 
     viewed_account_id = Column(Integer, ForeignKey(
         'accounts.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
