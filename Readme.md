@@ -6,3 +6,4 @@ Database: PostgreSQL
 
 ORM: SqlAlchemy
 
+Test Environment: Nosetests, WebTest
