@@ -1,26 +1,50 @@
 # -*- coding: utf-8 -*-
 """Account controller module"""
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm.exc import NoResultFound
 from tg import expose
-from tg.exceptions import HTTPBadRequest, HTTPOk
+from tg.exceptions import HTTPBadRequest, HTTPOk, HTTPNotFound
 from tg.controllers.restcontroller import RestController
 
 from ave.model import DBSession, Account
 
 
-class AccountsController(RestController):
+class AccountController(RestController):
 
     @expose('json')
-    def new(self, **kw):
+    def get_one(self, account_id):
+        """
+        Get an account
+
+        :param account_id :type: int
+
+        :return Account :type: dict
+        """
+        if not isinstance(account_id, int):
+            raise HTTPBadRequest(explanation='account_id must be int, rather %s is provided' % type(account_id))
+        try:
+            account = DBSession.query(Account).filter(Account.id == account_id).one()
+        except NoResultFound:
+            raise HTTPNotFound()
+        return dict(
+            username=account.username,
+            reputation=account.reputation,
+            badges=account.badges,
+            created=account.created,
+            bio=account.bio
+        )
+
+    @expose('json')
+    def post(self, **kw):
         """
         Adding new account
 
-        :param kw:
+        :param kw :type: dict
             {
                 'username': value
-                'password': value
-                'email_address': value
-                'bio': value
+                'password': value (str)
+                'email_address': value (str)
+                'bio': value (str)
             }
 
         :return HttpStatus

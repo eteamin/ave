@@ -9,7 +9,7 @@ from tg import predicates
 from ave import model
 from ave.controllers.secure import SecureController
 from ave.controllers.question import QuestionController
-from ave.controllers.accounts import AccountsController
+from ave.controllers.accounts import AccountController
 from ave.model import DBSession
 from tgext.admin.tgadminconfig import BootstrapTGAdminConfig as TGAdminConfig
 from tgext.admin.controller import AdminController
@@ -36,7 +36,7 @@ class RootController(BaseController):
     """
     secc = SecureController()
     question = QuestionController()
-    account = AccountsController()
+    accounts = AccountController()
     admin = AdminController(model, DBSession, config_type=TGAdminConfig)
 
     error = ErrorController()

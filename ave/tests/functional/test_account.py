@@ -31,7 +31,13 @@ class TestAccount(TestController):
             'email_address': 'test@test.com',
             'bio': 'tester'
         }
-        post_resp = self.app.post('/account/new', params=valid_account, status=200)
-        # Get the question just posted
-        get_resp = self.app.get('/acco')
-        eq_(keep_keys(valid_account.keys(), resp), valid_account)
+        self.app.post('/account/new', params=valid_account, status=200)
+        # Get the account just posted
+        get_resp = self.app.get('/account/1')
+        eq_(
+            keep_keys(['username', 'bio'], valid_account),
+            keep_keys(['username', 'bio'], get_resp)
+        )
+        assert get_resp['reputation'] == 0
+        assert get_resp['badges'] == ''
+
