@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""{{target.capitalize()}} controller module"""
+"""Question controller module"""
 
 from tg import expose, redirect, validate, flash, url
 from tg.controllers.restcontroller import RestController
