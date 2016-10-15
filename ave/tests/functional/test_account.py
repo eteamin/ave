@@ -18,7 +18,6 @@ class TestAccount(TestController):
     Tests for the Account Controller.
 
     """
-
     application_under_test = 'main'
 
     def test_post_account(self):

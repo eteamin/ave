@@ -17,6 +17,7 @@ downloads/
 eggs/
 .eggs/
 data/
+.i18n/
 ave/.i18n/
 parts/
 sdist/
