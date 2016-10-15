@@ -20,8 +20,8 @@ class TestAccount(TestController):
     """
     application_under_test = 'main'
 
-    def test_post_account(self):
-        """Account Posting Test"""
+    def test_account(self):
+        """Account Post, Get Test"""
 
         # Posting a valid account
         valid_account = {
@@ -30,9 +30,10 @@ class TestAccount(TestController):
             'email_address': 'test@test.com',
             'bio': 'tester'
         }
-        self.app.post('/accounts/', params=valid_account, status=200)
+        post_resp = self.app.post('/accounts/', params=valid_account, status=200).json
+
         # Get the account just posted
-        get_resp = self.app.get('/accounts/1').json
+        get_resp = self.app.get('/accounts/%s' % post_resp['id']).json
         eq_(
             keep_keys(['username', 'bio'], valid_account),
             keep_keys(['username', 'bio'], get_resp)
@@ -40,3 +41,8 @@ class TestAccount(TestController):
         assert get_resp['reputation'] == 0
         assert get_resp['badges'] == ''
 
+        # Delete the account just got
+        self.app.delete('/accounts/%s' % get_resp['id'])
+
+        # Get the account just deleted
+        self.app.get('/accounts/%s' % get_resp['id'], status=404)

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """Account controller module"""
+
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from tg import expose
-from tg.exceptions import HTTPBadRequest, HTTPOk, HTTPNotFound
+from tg.exceptions import HTTPBadRequest, HTTPOk, HTTPNotFound, HTTPUnauthorized
 from tg.controllers.restcontroller import RestController
 
 from ave.model import DBSession, Account
@@ -29,6 +30,7 @@ class AccountController(RestController):
         except NoResultFound:
             raise HTTPNotFound()
         return dict(
+            id=account.id,
             username=account.username,
             reputation=account.reputation,
             badges=account.badges,
@@ -64,6 +66,32 @@ class AccountController(RestController):
             DBSession.flush()
         except IntegrityError:
             raise HTTPBadRequest(explanation='Username or email address is already taken')
-        return HTTPOk
+        return dict(
+            id=account.id,
+            username=account.username,
+            reputation=account.reputation,
+            badges=account.badges,
+            created=account.created,
+            bio=account.bio
+        )
 
+    @expose('json')
+    def post_delete(self, account_id):
+        """
+        Delete and Account
+
+        :param account_id :type: str
+
+        :return: HttpStatus
+        """
+        try:
+            _id = int(account_id)
+        except ValueError:
+            raise HTTPBadRequest(explanation='account_id must be int, rather %s is provided' % type(account_id))
+        try:
+            account = DBSession.query(Account).filter(Account.id == _id).one()
+            DBSession.delete(account)
+        except NoResultFound:
+            raise HTTPNotFound()
+        return HTTPOk
 
