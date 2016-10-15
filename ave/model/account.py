@@ -12,12 +12,14 @@ from ave.model import DeclarativeBase
 
 
 class Account(DeclarativeBase):
+
     """
     Created on Oct, 14, 2016
 
     User accounts
 
     """
+
     __tablename__ = 'accounts'
 
     id = Column(Integer, primary_key=True)

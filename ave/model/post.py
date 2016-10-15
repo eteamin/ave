@@ -11,17 +11,21 @@ from ave.model import DeclarativeBase
 
 
 class Post(DeclarativeBase):
+
     """
     Created on Oct, 14, 2016
 
     Model for Question, Answer and Comment
     Having title, votes, views and tags as nullable fields as a workaround for handling all three Post types
     in a single class.
+    parent_id is used for accessing answers and comments of a question, thus null if post_type == 1 (question)
 
     """
+
     __tablename__ = 'posts'
 
     id = Column(Integer, primary_key=True)
+    parent_id = Column(Integer, nullable=True)  # null if post is question
 
     post_type_id = Column(Integer, ForeignKey(
         'post_types.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)

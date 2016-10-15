@@ -9,6 +9,7 @@ from ave.model import DeclarativeBase
 
 
 class View(DeclarativeBase):
+
     """
     Created on Oct, 14, 2016
 
@@ -17,6 +18,7 @@ class View(DeclarativeBase):
     Using a UniqueConstraint so view is counted per user, not per opening the question.
 
     """
+
     __tablename__ = 'views'
 
     id = Column(Integer, primary_key=True)

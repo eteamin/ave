@@ -7,12 +7,14 @@ from ave.model import DeclarativeBase
 
 
 class PostType(DeclarativeBase):
+
     """
     Created on Oct, 14, 2016
 
     Post types are Question, Answer, Comment
 
     """
+
     __tablename__ = 'post_types'
 
     id = Column(Integer, primary_key=True)

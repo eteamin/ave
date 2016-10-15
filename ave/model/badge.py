@@ -7,6 +7,7 @@ from ave.model import DeclarativeBase
 
 
 class Badge(DeclarativeBase):
+
     """
     Created on Oct, 14, 2016
 
@@ -14,6 +15,7 @@ class Badge(DeclarativeBase):
     Badges are not to be `CRUD`ed by users.
 
     """
+
     __tablename__ = 'badges'
 
     id = Column(Integer, primary_key=True)

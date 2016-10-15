@@ -9,6 +9,7 @@ from ave.model import DeclarativeBase
 
 
 class Vote(DeclarativeBase):
+
     """
     Created on Oct, 14, 2016
 
@@ -19,6 +20,7 @@ class Vote(DeclarativeBase):
     in case of consecutive UpVoting and DownVoting, only `value` is overwritten.
 
     """
+
     __tablename__ = 'votes'
 
     id = Column(Integer, primary_key=True)

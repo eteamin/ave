@@ -9,6 +9,7 @@ from ave.model import DeclarativeBase
 
 
 class ProfileViewer(DeclarativeBase):
+
     """
     Created on Oct, 14, 2016
 
@@ -17,6 +18,7 @@ class ProfileViewer(DeclarativeBase):
     Using a UniqueConstraint so view is counted per user, not per opening the account page.
 
     """
+
     __tablename__ = 'profile_viewers'
 
     id = Column(Integer, primary_key=True)
