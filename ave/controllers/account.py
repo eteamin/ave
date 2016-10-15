@@ -16,14 +16,16 @@ class AccountController(RestController):
         """
         Get an account
 
-        :param account_id :type: int
+        :param account_id :type: str
 
         :return Account :type: dict
         """
-        if not isinstance(account_id, str):
-            raise HTTPBadRequest(explanation='account_id must be str, rather %s is provided' % type(account_id))
         try:
-            account = DBSession.query(Account).filter(Account.id == account_id).one()
+            _id = int(account_id)
+        except ValueError:
+            raise HTTPBadRequest(explanation='account_id must be int, rather %s is provided' % account_id)
+        try:
+            account = DBSession.query(Account).filter(Account.id == _id).one()
         except NoResultFound:
             raise HTTPNotFound()
         return dict(
