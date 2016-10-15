@@ -41,10 +41,10 @@ class AccountController(RestController):
 
         :param kw :type: dict
             {
-                'username': value
-                'password': value (str)
-                'email_address': value (str)
-                'bio': value (str)
+                'username': value :type: str
+                'password': value :type: str
+                'email_address': value :type: str
+                'bio': value :type: str
             }
 
         :return HttpStatus
