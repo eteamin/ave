@@ -31,9 +31,9 @@ class TestAccount(TestController):
             'email_address': 'test@test.com',
             'bio': 'tester'
         }
-        self.app.post('/account/new', params=valid_account, status=200)
+        self.app.post('/accounts/', params=valid_account, status=200)
         # Get the account just posted
-        get_resp = self.app.get('/account/1')
+        get_resp = self.app.get('/accounts/1').json
         eq_(
             keep_keys(['username', 'bio'], valid_account),
             keep_keys(['username', 'bio'], get_resp)

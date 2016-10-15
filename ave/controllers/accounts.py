@@ -20,8 +20,8 @@ class AccountController(RestController):
 
         :return Account :type: dict
         """
-        if not isinstance(account_id, int):
-            raise HTTPBadRequest(explanation='account_id must be int, rather %s is provided' % type(account_id))
+        if not isinstance(account_id, str):
+            raise HTTPBadRequest(explanation='account_id must be str, rather %s is provided' % type(account_id))
         try:
             account = DBSession.query(Account).filter(Account.id == account_id).one()
         except NoResultFound:
