@@ -76,6 +76,13 @@ class TestAccount(TestController):
         self.app.delete('/accounts/%s' % post_resp2['id'])
         self.app.delete('/accounts/%s' % post_resp2['id'], status=404)
 
+        # Get with invalid account_id
+        self.app.get('/accounts/%s' % 'invalid', status=400)
+
+        # Delete with invalid account_id
+        self.app.delete('/accounts/%s' % 'invalid', status=400)
+
+
 
 
 
