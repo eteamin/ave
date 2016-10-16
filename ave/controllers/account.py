@@ -24,7 +24,7 @@ class AccountController(RestController):
         try:
             _id = int(account_id)
         except ValueError:
-            raise HTTPBadRequest(explanation='account_id must be int, rather %s is provided' % account_id)
+            raise HTTPBadRequest(explanation='account_id must be int')
         try:
             account = DBSession.query(Account).filter(Account.id == _id).one()
         except NoResultFound:
@@ -84,7 +84,7 @@ class AccountController(RestController):
         try:
             _id = int(account_id)
         except ValueError:
-            raise HTTPBadRequest(explanation='account_id must be int, rather %s is provided' % type(account_id))
+            raise HTTPBadRequest(explanation='account_id must be int')
         try:
             account = DBSession.query(Account).filter(Account.id == _id).one()
             DBSession.delete(account)
