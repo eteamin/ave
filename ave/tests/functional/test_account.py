@@ -5,7 +5,7 @@ Integration tests for the Account.
 """
 from __future__ import unicode_literals
 
-from nose.tools import eq_, ok_
+from nose.tools import eq_, ok_, assert_raises, assert_equal
 
 from ave import model
 from ave.model import DBSession
@@ -23,6 +23,8 @@ class TestAccount(TestController):
     def test_account(self):
         """Account Post, Get Test"""
 
+        """WhiteBox Testing"""
+
         # Posting a valid account
         valid_account = {
             'username': 'test',
@@ -38,11 +40,44 @@ class TestAccount(TestController):
             keep_keys(['username', 'bio'], valid_account),
             keep_keys(['username', 'bio'], get_resp)
         )
-        assert get_resp['reputation'] == 0
-        assert get_resp['badges'] == ''
+        assert_equal(get_resp['reputation'], 0)
+        assert_equal(get_resp['badges'], '')
 
         # Delete the account just got
         self.app.delete('/accounts/%s' % get_resp['id'])
 
         # Get the account just deleted
         self.app.get('/accounts/%s' % get_resp['id'], status=404)
+
+        """BlackBox Testing"""
+
+        # Typo in keys
+        invalid_account = {
+            'username': 'invalid',
+            'passwosrd': 'invalid',
+            'email_address': 'invalid@test.com',
+            'bio': 'invalid tester'
+        }
+        self.app.post('/accounts/', params=invalid_account, status=400)
+
+        # Dict lacking one pair
+        invalid_account2 = {
+            'username': 'invalid',
+            'password': 'invalid',
+            'bio': 'invalid tester'
+        }
+        self.app.post('/accounts/', params=invalid_account2, status=400)
+
+        # Trying to violate username and email uniqueness
+        post_resp2 = self.app.post('/accounts/', params=valid_account).json
+        self.app.post('/accounts/', params=valid_account, status=400)
+
+        # Deleting twice
+        self.app.delete('/accounts/%s' % post_resp2['id'])
+        self.app.delete('/accounts/%s' % post_resp2['id'], status=404)
+
+
+
+
+
+

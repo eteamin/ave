@@ -4,7 +4,7 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from tg import expose
-from tg.exceptions import HTTPBadRequest, HTTPOk, HTTPNotFound, HTTPUnauthorized
+from tg.exceptions import HTTPBadRequest, HTTPOk, HTTPNotFound, HTTPTemporaryRedirect
 from tg.controllers.restcontroller import RestController
 
 from ave.model import DBSession, Account
@@ -54,11 +54,8 @@ class AccountController(RestController):
         :return HttpStatus
         """
         account = Account()
-        if list(kw.keys()).sort() != ['username', 'password', 'email_address', 'bio'].sort():
+        if sorted(list(kw.keys())) != sorted(['username', 'password', 'email_address', 'bio']):
             raise HTTPBadRequest(explanation='required keys are not provided')
-        for v in list(kw.values()):
-            if not isinstance(v, str):
-                raise HTTPBadRequest(explanation='Values must be string. Detected %s with type %s' % (v, type(v)))
         for k, v in kw.items():
             setattr(account, k, v)
         DBSession.add(account)
@@ -76,7 +73,7 @@ class AccountController(RestController):
         )
 
     @expose('json')
-    def post_delete(self, account_id):
+    def delete(self, account_id):
         """
         Delete and Account
 

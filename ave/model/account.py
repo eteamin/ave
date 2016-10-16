@@ -23,9 +23,9 @@ class Account(DeclarativeBase):
     __tablename__ = 'accounts'
 
     id = Column(Integer, primary_key=True)
-    username = Column(Unicode(25), unique=True)
-    _password = Column('password', Unicode(128))
-    email_address = Column(Unicode(50), unique=True)
+    username = Column(Unicode(25), unique=True, nullable=False)
+    _password = Column('password', Unicode(128), nullable=False)
+    email_address = Column(Unicode(50), unique=True, nullable=False)
     bio = Column(Unicode(1000), nullable=True)
     reputation = Column(Integer, default=0)
     badges = Column(Unicode(1000), default='')
