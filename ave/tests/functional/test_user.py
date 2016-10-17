@@ -7,8 +7,6 @@ from __future__ import unicode_literals
 
 from nose.tools import eq_, ok_, assert_raises, assert_equal
 
-from ave import model
-from ave.model import DBSession
 from ave.tests import TestController
 from ave.tests.helpers import keep_keys
 
@@ -49,15 +47,14 @@ class TestUser(TestController):
             'username': 'invalid',
             'password': 'test'
         }
-        self.app.post('/users/login', params=invalid_username, status=404)
+        self.app.post('/users/login', params=invalid_username, status=400)
 
         # Invalid password
-        # TODO: wow!
-        # invalid_password = {
-        #     'username': 'test',
-        #     'password': 'invalid'
-        # }
-        # self.app.post('/users/login', params=invalid_password, status=401)
+        invalid_password = {
+            'username': 'test',
+            'password': 'invalid'
+        }
+        self.app.post('/users/login', params=invalid_password, status=401)
 
         # Invalid request params
         invalid_login = {

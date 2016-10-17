@@ -1,8 +1,6 @@
 .. image:: https://api.travis-ci.org/eteamin/ave.svg?branch=master
      :target: https://api.travis-ci.org/eteamin/
 
-.. image:: https://coveralls.io/repos/github/eteamin/ave/badge.svg?branch=master
-     :target: https://coveralls.io/github/eteamin/ave?branch=master
 
 Ave: Community App WebApi
 -------------

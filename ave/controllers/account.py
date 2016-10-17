@@ -3,7 +3,7 @@
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
-from tg import expose
+from tg import expose, abort
 from tg.exceptions import HTTPBadRequest, HTTPOk, HTTPNotFound, HTTPTemporaryRedirect
 from tg.controllers.restcontroller import RestController
 
@@ -24,11 +24,11 @@ class AccountController(RestController):
         try:
             _id = int(account_id)
         except ValueError:
-            raise HTTPBadRequest(explanation='account_id must be int')
+            abort(detail='account_id must be int', passthrough='json')
         try:
             account = DBSession.query(Account).filter(Account.id == _id).one()
         except NoResultFound:
-            raise HTTPNotFound()
+            abort(404, detail='No such user!', passthrough='json')
         return dict(
             id=account.id,
             username=account.username,
@@ -55,14 +55,14 @@ class AccountController(RestController):
         """
         account = Account()
         if sorted(list(kw.keys())) != sorted(['username', 'password', 'email_address', 'bio']):
-            raise HTTPBadRequest(explanation='required keys are not provided')
+            abort(400, detail='required keys are not provided', passthrough='json')
         for k, v in kw.items():
             setattr(account, k, v)
         DBSession.add(account)
         try:
             DBSession.flush()
         except IntegrityError:
-            raise HTTPBadRequest(explanation='Username or email address is already taken')
+            abort(400, detail='Username or email address is already taken', passthrough='json')
         return dict(
             id=account.id,
             username=account.username,
@@ -84,12 +84,12 @@ class AccountController(RestController):
         try:
             _id = int(account_id)
         except ValueError:
-            raise HTTPBadRequest(explanation='account_id must be int')
+            abort(400, detail='account_id must be int', passthrough='json')
         try:
             account = DBSession.query(Account).filter(Account.id == _id).one()
             DBSession.delete(account)
         except NoResultFound:
-            raise HTTPNotFound()
+            raise abort(404, detail='No such user!', passthrough='json')
         return HTTPOk
 
 
