@@ -16,4 +16,6 @@ install:
 before_script:
   - psql -c 'create database ave_test;' -U postgres
 
-script: nosetests
+script: coverage run --source ave $(which nosetests)
+
+after_success: coveralls
