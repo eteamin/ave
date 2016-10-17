@@ -1,4 +1,5 @@
-
+.. image:: https://api.travis-ci.org/eteamin/ave.svg?branch=master
+     :target: https://api.travis-ci.org/eteamin/
 Ave: Community App WebApi
 
 Framework: TurboGears 2.3.9
