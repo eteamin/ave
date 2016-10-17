@@ -1,15 +1,19 @@
 language: python
+
 sudo: required
+
 python:
   - "3.5"
 
+services:
+  - postgresql
+
 install:
-  - sudo -i -u postgres psql
-  - create user ave;
-  - alter user ave with encrypted password '123456';
-  - create database ave_test;
   - pip install tg.devtools
   - pip install .
   - pip install -r requirements.txt
+
+before_script:
+  - psql -c 'create database ave_test;' -U postgres
 
 script: nosetests
