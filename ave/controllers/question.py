@@ -4,11 +4,18 @@
 from tg import expose, redirect, validate, flash, url
 from tg.controllers.restcontroller import RestController
 
+from ave.lib.base import BaseController
 from ave.model import DBSession
 
+count = 0
 
-class QuestionController(RestController):
 
-    @expose('json')
-    def new(self, **kw):
-        pass
+class QuestionController(BaseController):
+
+    @expose()
+    def test(self):
+        global count
+        count += 1
+        print(count)
+
+
