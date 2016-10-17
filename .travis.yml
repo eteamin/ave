@@ -1,8 +1,17 @@
 language: python
+sudo: required
 python:
   - "3.5"
 
 install:
+  - sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+  - $ wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
+  - sudo apt-get update
+  - sudo apt-get install postgresql postgresql-contrib
+  - sudo -i -u postgres psql
+  - create user ave;
+  - alter user ave with encrypted password '123456';
+  - create database ave_test;
   - pip install tg.devtools
   - pip install .
   - pip install -r requirements.txt
