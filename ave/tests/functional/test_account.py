@@ -81,3 +81,4 @@ class TestAccount(TestController):
 
         # Delete with invalid account_id
         self.app.delete('/accounts/%s' % 'invalid', status=400)
+

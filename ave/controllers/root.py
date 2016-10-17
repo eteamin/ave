@@ -10,6 +10,7 @@ from ave import model
 from ave.controllers.secure import SecureController
 from ave.controllers.question import QuestionController
 from ave.controllers.account import AccountController
+from ave.controllers.user import UserController
 from ave.model import DBSession
 from tgext.admin.tgadminconfig import BootstrapTGAdminConfig as TGAdminConfig
 from tgext.admin.controller import AdminController
@@ -37,6 +38,7 @@ class RootController(BaseController):
     secc = SecureController()
     question = QuestionController()
     accounts = AccountController()
+    users = UserController()
     admin = AdminController(model, DBSession, config_type=TGAdminConfig)
 
     error = ErrorController()
