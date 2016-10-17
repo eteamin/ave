@@ -5,5 +5,6 @@ python:
 install:
   - pip install tg.devtools
   - pip install .
+  - pip install requirments.txt
 
 script: nosetests
