@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Unit and functional test suite for ave."""
+import transaction
 
 from os import getcwd
 from paste.deploy import loadapp
@@ -24,6 +25,8 @@ def setup_app():
     """Setup the application."""
     cmd = SetupAppCommand(Bunch(options=Bunch(verbose_level=1)), Bunch())
     cmd.run(Bunch(config_file='config:test.ini', section_name=None))
+    [model.DBSession.add(model.PostType(title=i)) for i in ['question', 'answer', 'comment']]
+    transaction.commit()
 
 
 def setup_db():

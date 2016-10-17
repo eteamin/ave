@@ -5,10 +5,8 @@ Integration tests for the Account.
 """
 from __future__ import unicode_literals
 
-from nose.tools import eq_, ok_, assert_raises, assert_equal
+from nose.tools import eq_, assert_equal
 
-from ave import model
-from ave.model import DBSession
 from ave.tests import TestController
 from ave.tests.helpers import keep_keys
 

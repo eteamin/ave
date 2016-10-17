@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-PostType
 
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode
