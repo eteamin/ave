@@ -1,7 +1,5 @@
 language: python
 
-sudo: required
-
 python:
   - "3.5"
 
@@ -14,8 +12,7 @@ install:
   - pip install -r requirements.txt
 
 before_script:
-  - psql -c 'alter user postgres with encrypted password '1234'; create database ave_test;' -U postgres
+  - psql -c "alter user postgres with encrypted password '1234'; create database ave_test;" -U postgres
 
 script: coverage run --source ave $(which nosetests)
 
-after_success: coveralls

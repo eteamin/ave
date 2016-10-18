@@ -36,7 +36,7 @@ class RootController(BaseController):
 
     """
     secc = SecureController()
-    question = QuestionController()
+    questions = QuestionController()
     accounts = AccountController()
     users = UserController()
     admin = AdminController(model, DBSession, config_type=TGAdminConfig)

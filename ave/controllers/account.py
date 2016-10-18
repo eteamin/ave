@@ -4,7 +4,6 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from tg import expose, abort
-from tg.exceptions import HTTPBadRequest, HTTPOk, HTTPNotFound, HTTPTemporaryRedirect
 from tg.controllers.restcontroller import RestController
 
 from ave.model import DBSession, Account
@@ -90,6 +89,3 @@ class AccountController(RestController):
             DBSession.delete(account)
         except NoResultFound:
             raise abort(404, detail='No such user!', passthrough='json')
-        return HTTPOk
-
-

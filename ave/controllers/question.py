@@ -1,21 +1,38 @@
 # -*- coding: utf-8 -*-
 """Question controller module"""
 
-from tg import expose, redirect, validate, flash, url
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm.exc import NoResultFound
+from tg import expose, abort
 from tg.controllers.restcontroller import RestController
 
-from ave.lib.base import BaseController
-from ave.model import DBSession
-
-count = 0
+from ave.model import DBSession, Account
 
 
-class QuestionController(BaseController):
+class QuestionController(RestController):
 
-    @expose()
-    def test(self):
-        global count
-        count += 1
-        print(count)
+    @expose('json')
+    def post(self, **kw):
+        """
+        Adding new question
 
+        :param kw :type: dict
+            {
+                'username': value :type: str
+                'password': value :type: str
+                'email_address': value :type: str
+                'bio': value :type: str
+            }
 
+        :return HttpStatus
+        """
+        account = Account()
+        if sorted(list(kw.keys())) != sorted(['username', 'password', 'email_address', 'bio']):
+            abort(400, detail='required keys are not provided', passthrough='json')
+        for k, v in kw.items():
+            setattr(account, k, v)
+        DBSession.add(account)
+        try:
+            DBSession.flush()
+        except IntegrityError:
+            abort(400, detail='Username or email address is already taken', passthrough='json')

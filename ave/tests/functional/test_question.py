@@ -18,10 +18,10 @@ class TestQuestion(TestController):
 
     application_under_test = 'main'
 
-    def test_post_question(self):
-        """Question Posting Test"""
+    def test_question(self):
+        """Question Controller Test"""
 
-        # Posting an account, and also all post types
+        # Posting an account
         account = {
             'username': 'test',
             'password': 'test',
@@ -30,7 +30,6 @@ class TestQuestion(TestController):
         }
         account_post_resp = self.app.post('/accounts/', params=account).json
 
-        return
         # Posting a valid question
         valid_question = {
             'post_type_id': '1',
@@ -38,6 +37,7 @@ class TestQuestion(TestController):
             'description': 'testing',
             'account_id': account_post_resp['id']
         }
-        resp = self.app.post('/question/new', params=valid_question, status=200)
+        resp = self.app.post('/questions/', params=valid_question)
+
         # Get the question just posted
         eq_(resp['id'], account['id'])
