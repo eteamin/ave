@@ -3,7 +3,6 @@
 Integration tests for the Question.
 
 """
-from __future__ import unicode_literals
 
 from nose.tools import eq_, ok_
 

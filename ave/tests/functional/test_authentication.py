@@ -6,7 +6,6 @@ As ave grows and the authentication method changes, only these tests
 should be updated.
 
 """
-from __future__ import unicode_literals
 
 from nose.tools import eq_, ok_
 
