@@ -3,8 +3,6 @@
 Integration tests for the Account.
 
 """
-from __future__ import unicode_literals
-
 from nose.tools import eq_, assert_equal
 
 from ave.tests import TestController
@@ -45,7 +43,7 @@ class TestAccount(TestController):
         self.app.delete('/accounts/%s' % get_resp['id'])
 
         # Get the account just deleted
-        self.app.get('/accounts/%s' % get_resp['id'], status=404)
+        self.app.get('/accounts/%s' % get_resp['id'], status=400)
 
         """BlackBox Testing"""
 
@@ -79,4 +77,3 @@ class TestAccount(TestController):
 
         # Delete with invalid account_id
         self.app.delete('/accounts/%s' % 'invalid', status=400)
-

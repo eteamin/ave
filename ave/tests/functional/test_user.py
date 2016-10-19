@@ -3,8 +3,6 @@
 Integration tests for the User Interaction. e.g Logging in.
 
 """
-from __future__ import unicode_literals
-
 from nose.tools import eq_, ok_, assert_raises, assert_equal
 
 from ave.tests import TestController

@@ -28,7 +28,7 @@ class AccountController(RestController):
         try:
             account = DBSession.query(Account).filter(Account.id == _id).one()
         except NoResultFound:
-            abort(status_code=404, detail='No such user', passthrough='json')
+            abort(status_code=400, detail='No such user', passthrough='json')
         return dict(
             id=account.id,
             username=account.username,
