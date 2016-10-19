@@ -28,7 +28,7 @@ class AccountController(RestController):
         try:
             account = DBSession.query(Account).filter(Account.id == _id).one()
         except NoResultFound:
-            abort(status_code=400, detail='No such user', passthrough='json')
+            abort(status_code=404, detail='No such user', passthrough='json')
         return dict(
             id=account.id,
             username=account.username,
@@ -84,9 +84,9 @@ class AccountController(RestController):
         try:
             _id = int(account_id)
         except ValueError:
-            HTTPBadRequest(explanation='account_id must be int')
+            abort(status_code=400, detail='account_id must be int', passthrough='json')
         try:
             account = DBSession.query(Account).filter(Account.id == _id).one()
             DBSession.delete(account)
         except NoResultFound:
-            raise HTTPNotFound(explanation='No such User')
+            abort(status_code=404, detail='No such user', passthrough='json')

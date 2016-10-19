@@ -43,7 +43,7 @@ class TestAccount(TestController):
         self.app.delete('/accounts/%s' % get_resp['id'])
 
         # Get the account just deleted
-        self.app.get('/accounts/%s' % get_resp['id'], status=400)
+        self.app.get('/accounts/%s' % get_resp['id'], status=404)
 
         """BlackBox Testing"""
 

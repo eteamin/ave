@@ -17,11 +17,13 @@ class ErrorController(BaseController):
     ErrorDocuments middleware in your config/middleware.py file.
 
     """
-
+    @expose('json')
     @expose('ave.templates.error')
     def document(self, *args, **kwargs):
         """Render the error document"""
         resp = request.environ.get('tg.original_response')
+        if resp.content_type == 'application/json':
+            return resp
         try:
             # tg.abort exposes the message as .detail in response
             message = resp.detail
