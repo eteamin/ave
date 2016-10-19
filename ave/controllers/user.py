@@ -3,7 +3,6 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from tg import abort, expose
-from tg.exceptions import HTTPBadRequest, HTTPNotFound, HTTPUnauthorized
 from ave.lib.base import BaseController
 from ave.model import DBSession, Account
 
@@ -26,15 +25,15 @@ class UserController(BaseController):
         :return Account :type: dict or HttpStatus
         """
         if sorted(list(kw.keys())) != sorted(['username', 'password']):
-            abort(400, detail='required keys are not provided', passthrough='json')
+            abort(status_code=400, detail='required keys are not provided', passthrough='json')
         username = kw['username']
         password = kw['password']
         try:
             user = DBSession.query(Account).filter(Account.username == username).one()
         except NoResultFound:
-            abort(400, detail='Invalid username or password', passthrough='json')
+            abort(status_code=400, detail='Invalid username or password', passthrough='json')
         if not user.validate_password(password):
-            abort(401, detail='Invalid password', passthrough='json')
+            abort(status_code=401, detail='Invalid password', passthrough='json')
         return dict(
             id=user.id,
             username=user.username,
