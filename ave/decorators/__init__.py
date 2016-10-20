@@ -1,1 +1,1 @@
-from .all import is_authorized
+from .all import authorize

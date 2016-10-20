@@ -4,16 +4,18 @@
 from sqlalchemy.orm.exc import NoResultFound
 from tg import abort, expose
 from tg.exceptions import HTTPOk
-from ave.lib.base import BaseController
+from tg.controllers.restcontroller import RestController
 
 from ave.model import DBSession, Account
-from ave.decorators import is_authorized
+from ave.decorators import authorize
 
 __all__ = ['UserController']
 
 
-class UserController(BaseController):
+class UserController(RestController):
+
     @expose('json')
+    @authorize
     def login(self, **kw):
         """
         Logging into account
@@ -46,7 +48,7 @@ class UserController(BaseController):
         )
 
     @expose('json')
-    @is_authorized
+    @authorize
     def require_authentication(self, **kwargs):
         # This is a method for testing is_authorized decorator
         return HTTPOk()

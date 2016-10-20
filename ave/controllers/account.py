@@ -7,11 +7,13 @@ from tg import expose, abort
 from tg.controllers.restcontroller import RestController
 
 from ave.model import DBSession, Account
+from ave.decorators import authorize
 
 
 class AccountController(RestController):
 
     @expose('json')
+    @authorize
     def get_one(self, account_id):
         """
         Get an account
@@ -38,6 +40,7 @@ class AccountController(RestController):
         )
 
     @expose('json')
+    @authorize
     def post(self, **kw):
         """
         Adding new account
@@ -72,6 +75,7 @@ class AccountController(RestController):
         )
 
     @expose('json')
+    @authorize
     def delete(self, account_id):
         """
         Delete and Account

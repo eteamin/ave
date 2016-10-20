@@ -1,3 +1,11 @@
+from tg import config
+from pyDes import triple_des
+
+
+def make_auth_header():
+    secret_key = config.get('auth_secret_key')
+    auth_message = config.get('auth_message')
+    return {'token': triple_des(secret_key).encrypt(auth_message, padmode=2)}
 
 
 def keep_keys(keys, _dict):
@@ -10,7 +18,7 @@ def keep_keys(keys, _dict):
 kept = {}
 
 
-# Test
+# Test keep_keys
 if __name__ == '__main__':
     a = {
         'a': 1,

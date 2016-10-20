@@ -4,7 +4,6 @@ from tg import request, expose
 from tg.exceptions import HTTPOk
 
 from ave.lib.base import BaseController
-from ave.decorators import is_authorized
 
 
 __all__ = ['ErrorController']

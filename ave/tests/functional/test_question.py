@@ -7,6 +7,7 @@ Integration tests for the Question.
 from nose.tools import eq_, ok_
 
 from ave.tests import TestController
+from ave.tests.helpers import make_auth_header
 
 
 class TestQuestion(TestController):
@@ -27,7 +28,7 @@ class TestQuestion(TestController):
             'email_address': 'test@test.com',
             'bio': 'tester'
         }
-        account_post_resp = self.app.post('/accounts/', params=account).json
+        account_post_resp = self.app.post('/accounts/', params=account, headers=make_auth_header()).json
 
         # Posting a valid question
         valid_question = {

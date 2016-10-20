@@ -4,11 +4,9 @@ Integration tests for decorators.
 
 """
 from tg import config
-from nose.tools import eq_, assert_equal
-from pyDes import triple_des, des
+from pyDes import triple_des
 
 from ave.tests import TestController
-from ave.tests.helpers import keep_keys
 
 
 class TestDecorators(TestController):

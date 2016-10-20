@@ -2,16 +2,17 @@
 """Question controller module"""
 
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm.exc import NoResultFound
 from tg import expose, abort
 from tg.controllers.restcontroller import RestController
 
 from ave.model import DBSession, Account
+from ave.decorators import authorize
 
 
 class QuestionController(RestController):
 
     @expose('json')
+    @authorize
     def post(self, **kw):
         """
         Adding new question
