@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 """Error controller"""
 from tg import request, expose
+from tg.exceptions import HTTPOk
+
 from ave.lib.base import BaseController
+from ave.decorators import is_authorized
+
 
 __all__ = ['ErrorController']
 
@@ -15,7 +19,6 @@ class ErrorController(BaseController):
 
     This behaviour can be altered by changing the parameters to the
     ErrorDocuments middleware in your config/middleware.py file.
-
     """
     @expose('json')
     @expose('ave.templates.error')

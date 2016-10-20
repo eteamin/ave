@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 """Login controller"""
-from sqlalchemy.exc import IntegrityError
+
 from sqlalchemy.orm.exc import NoResultFound
 from tg import abort, expose
+from tg.exceptions import HTTPOk
 from ave.lib.base import BaseController
-from ave.model import DBSession, Account
 
+from ave.model import DBSession, Account
+from ave.decorators import is_authorized
 
 __all__ = ['UserController']
 
@@ -42,3 +44,9 @@ class UserController(BaseController):
             created=user.created,
             bio=user.bio
         )
+
+    @expose('json')
+    # @is_authorized
+    def require_authentication(self, **kwargs):
+        # This is a method for testing is_authorized decorator
+        return HTTPOk()

@@ -7,7 +7,6 @@ from tg import expose, abort
 from tg.controllers.restcontroller import RestController
 
 from ave.model import DBSession, Account
-from tg.exceptions import HTTPNotFound, HTTPBadRequest
 
 
 class AccountController(RestController):
