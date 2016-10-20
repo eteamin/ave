@@ -26,7 +26,7 @@ class TestDecorators(TestController):
         invalid_cipher_text = triple_des(secret_key).encrypt("I am not a kivy user", padmode=2)
 
         # Get with authentication
-        self.app.post('/users/require_authentication', params={}, headers={'token': cipher_text})
+        self.app.get('/users/require_authentication', params={}, headers={'token': cipher_text})
 
         # Get with invalid authentication
         self.app.get('/users/require_authentication', status=401)

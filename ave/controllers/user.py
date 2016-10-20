@@ -46,7 +46,7 @@ class UserController(BaseController):
         )
 
     @expose('json')
-    # @is_authorized
+    @is_authorized
     def require_authentication(self, **kwargs):
         # This is a method for testing is_authorized decorator
         return HTTPOk()
