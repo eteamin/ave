@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from tg import expose, abort
 from tg.controllers.restcontroller import RestController
 
-from ave.model import DBSession, Account
+from ave.model import DBSession, Post
 from ave.decorators import authorize
 
 
@@ -19,21 +19,22 @@ class QuestionController(RestController):
 
         :param kw :type: dict
             {
-                'username': value :type: str
-                'password': value :type: str
-                'email_address': value :type: str
-                'bio': value :type: str
+                'title': value :type: str
+                'post_type': value :type: str
+                'description': value :type: str
+                'account_id': value :type: str
             }
 
         :return HttpStatus
         """
-        account = Account()
-        if sorted(list(kw.keys())) != sorted(['username', 'password', 'email_address', 'bio']):
+        question = Post()
+        if sorted(list(kw.keys())) != sorted(['title', 'post_type', 'account_id', 'description']) \
+                or kw['post_type'] == '1':
             abort(400, detail='required keys are not provided', passthrough='json')
         for k, v in kw.items():
-            setattr(account, k, v)
-        DBSession.add(account)
+            setattr(question, k, v)
+        DBSession.add(question)
         try:
             DBSession.flush()
         except IntegrityError:
-            abort(400, detail='Username or email address is already taken', passthrough='json')
+            abort(400, detail='Question already exists', passthrough='json')

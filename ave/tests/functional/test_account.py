@@ -28,7 +28,7 @@ class TestAccount(TestController):
             'email_address': 'test@test.com',
             'bio': 'tester'
         }
-        post_resp = self.app.post('/accounts/', params=valid_account, headers=make_auth_header(), status=200).json
+        post_resp = self.app.post('/accounts/', params=valid_account, headers=make_auth_header()).json
 
         # Get the account just posted
         get_resp = self.app.get('/accounts/%s' % post_resp['id'], headers=make_auth_header()).json

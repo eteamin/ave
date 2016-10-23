@@ -32,7 +32,7 @@ class Post(DeclarativeBase):
     post_type = relationship('PostType', backref=backref('posts'))
 
     title = Column(Unicode(255), nullable=True)
-    description = Column(Unicode(1000), nullable=False)
+    description = Column(Unicode(1000), nullable=False, unique=True)
     creation_date = Column(DateTime, nullable=False, default=datetime.now)
     edit_date = Column(DateTime, nullable=True)
     report_count = Column(Integer, nullable=False, default=0)

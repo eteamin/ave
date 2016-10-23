@@ -5,8 +5,10 @@ Integration tests for decorators.
 """
 from tg import config
 from pyDes import triple_des
+from nose.tools import assert_equal
 
 from ave.tests import TestController
+from ave.tests.helpers import make_auth_header
 
 
 class TestDecorators(TestController):
@@ -24,7 +26,8 @@ class TestDecorators(TestController):
         invalid_cipher_text = triple_des(secret_key).encrypt("I am not a kivy user", padmode=2)
 
         # Get with authentication
-        self.app.get('/users/require_authentication', params={}, headers={'token': cipher_text})
+        get_resp = self.app.get('/users/require_authentication', headers=make_auth_header()).json
+        assert_equal(get_resp['OK'], True)
 
         # Get with invalid authentication
         self.app.get('/users/require_authentication', status=401)

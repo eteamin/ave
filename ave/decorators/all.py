@@ -11,4 +11,5 @@ def authorize(f):
         gibberish = request.environ['HTTP_TOKEN']
         if triple_des(secret_key).decrypt(gibberish, padmode=2).decode() != auth_message:
             abort(401, detail='Authentication failed', passthrough='json')
+        return f(*args, **kwargs)
     return wrapper

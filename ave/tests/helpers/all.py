@@ -15,7 +15,6 @@ def keep_keys(keys, _dict):
         kept[k] = _dict[k]
     [add(k) for k in _dict.keys() if k in keys]
     return kept
-kept = {}
 
 
 # Test keep_keys

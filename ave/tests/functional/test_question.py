@@ -37,4 +37,13 @@ class TestQuestion(TestController):
             'description': 'testing',
             'account_id': account_post_resp['id']
         }
-        # resp = self.app.post('/questions/', params=valid_question).json
+        self.app.post('/questions/', params=valid_question)
+
+        # question dict lacking pairs
+        invalid_question = {
+            'post_type_id': '1',
+            'title': 'test',
+            'description': 'testing',
+            'account_id': account_post_resp['id']
+        }
+

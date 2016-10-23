@@ -50,5 +50,5 @@ class UserController(RestController):
     @expose('json')
     @authorize
     def require_authentication(self, **kwargs):
-        # This is a method for testing is_authorized decorator
-        return HTTPOk()
+        # This is a method for testing authorize decorator
+        return dict(OK=True)
