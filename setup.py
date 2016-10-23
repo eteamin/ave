@@ -45,7 +45,8 @@ install_requires = [
     "tw2.forms",
     "tgext.admin >= 0.6.1",
     "WebHelpers2",
-    "psycopg2"
+    "psycopg2",
+    "pyDes"
 ]
 
 if py_version != (3, 2):
