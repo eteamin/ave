@@ -10,33 +10,39 @@ from ave.model import DBSession, Post
 from ave.decorators import authorize
 
 
-class QuestionController(RestController):
+class PostController(RestController):
 
     @expose('json')
     @authorize
-    def get_one(self, question_id):
+    def get_one(self, post_id):
         """
-        Adding new question
+        Getting a post
 
-        :param question_id :type: int
+        :param post_id :type: int
 
         :return HttpStatus
         """
         try:
-            _id = int(question_id)
+            _id = int(post_id)
         except ValueError:
-            abort(status_code=400, detail='question_id must be int', passthrough='json')
+            abort(status_code=400, detail='post must be int', passthrough='json')
         try:
-            question = DBSession.query(Post).filter(Post.id == _id).one()
+            post = DBSession.query(Post).filter(Post.id == _id).one()
         except NoResultFound:
-            abort(status_code=404, detail='No such question', passthrough='json')
+            abort(status_code=404, detail='No such post', passthrough='json')
+
         return dict(
-            title=question.title,
-            description=question.description,
-            creation_date=question.creation_date,
-            edit_date=question.edit_date,
-            post_type_id=question.post_type_id,
-            username=question.account.username
+            id=post.id,
+            parent_id=post.parent_id,
+            title=post.title,
+            description=post.description,
+            creation_date=post.creation_date,
+            edit_date=post.edit_date,
+            post_type_id=post.post_type_id,
+            username=post.account.username,
+            votes=post.votes,
+            views=post.views,
+            # tags=post.tags
         )
 
     @expose('json')
@@ -67,3 +73,7 @@ class QuestionController(RestController):
         except IntegrityError:
             abort(400, detail='Question already exists', passthrough='json')
         return dict(id=question.id)
+    #
+    # @expose('json')
+    # @authorize
+    # def delete(self, question_id):

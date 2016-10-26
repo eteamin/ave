@@ -8,7 +8,7 @@ from tg.exceptions import HTTPFound
 from tg import predicates
 from ave import model
 from ave.controllers.secure import SecureController
-from ave.controllers.question import QuestionController
+from ave.controllers.post import PostController
 from ave.controllers.account import AccountController
 from ave.controllers.user import UserController
 from ave.model import DBSession
@@ -36,7 +36,7 @@ class RootController(BaseController):
 
     """
     secc = SecureController()
-    questions = QuestionController()
+    posts = PostController()
     accounts = AccountController()
     users = UserController()
     admin = AdminController(model, DBSession, config_type=TGAdminConfig)
@@ -50,6 +50,7 @@ class RootController(BaseController):
     def index(self):
         """Handle the front-page."""
         return dict(page='index')
+
     @expose('ave.templates.about')
     def about(self):
         """Handle the 'about' page."""
