@@ -36,7 +36,7 @@ class Post(DeclarativeBase):
     creation_date = Column(DateTime, nullable=False, default=datetime.now)
     edit_date = Column(DateTime, nullable=True)
     report_count = Column(Integer, nullable=False, default=0)
-
+    tags = Column(Unicode(255), nullable=False) # Comma separated
     account_id = Column(Integer, ForeignKey(
         'accounts.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
     account = relationship('Account', backref=backref('posts'))

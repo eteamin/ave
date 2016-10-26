@@ -42,7 +42,7 @@ class PostController(RestController):
             username=post.account.username,
             votes=post.votes,
             views=post.views,
-            # tags=post.tags
+            tags=post.tags
         )
 
     @expose('json')
@@ -57,12 +57,13 @@ class PostController(RestController):
                 'post_type': value :type: str
                 'description': value :type: str
                 'account_id': value :type: str
+                'tags': value :type: str
             }
 
         :return HttpStatus
         """
         question = Post()
-        if sorted(list(kw.keys())) != sorted(['title', 'post_type_id', 'account_id', 'description']) \
+        if sorted(list(kw.keys())) != sorted(['title', 'post_type_id', 'account_id', 'description', 'tags']) \
                 or kw['post_type_id'] != '1':
             abort(400, detail='required keys are not provided', passthrough='json')
         for k, v in kw.items():
