@@ -25,7 +25,7 @@ class PostController(RestController):
         try:
             _id = int(post_id)
         except ValueError:
-            abort(status_code=400, detail='post must be int', passthrough='json')
+            abort(status_code=400, detail='post_id must be int', passthrough='json')
         try:
             post = DBSession.query(Post).filter(Post.id == _id).one()
         except NoResultFound:
@@ -49,32 +49,58 @@ class PostController(RestController):
     @authorize
     def post(self, **kw):
         """
-        Adding new question
+        Adding new post
 
         :param kw :type: dict
             {
                 'title': value :type: str
-                'post_type': value :type: str
+                'post_type_id': value :type: str
+                'parent_id' value :type: str None if post_type_id == 1
                 'description': value :type: str
                 'account_id': value :type: str
-                'tags': value :type: str
+                'tags': value :type: str None if post_type_id != 1
             }
 
         :return HttpStatus
         """
-        question = Post()
-        if sorted(list(kw.keys())) != sorted(['title', 'post_type_id', 'account_id', 'description', 'tags']) \
-                or kw['post_type_id'] != '1':
-            abort(400, detail='required keys are not provided', passthrough='json')
+        post = Post()
+        if sorted(
+                list(kw.keys())
+        ) != sorted(
+                ['title',
+                 'post_type_id',
+                 'account_id',
+                 'description',
+                 'tags',
+                 'parent_id']
+        ):
+            abort(400, detail='Required keys are not provided', passthrough='json')
         for k, v in kw.items():
-            setattr(question, k, v)
-        DBSession.add(question)
+            setattr(post, k, v)
+        DBSession.add(post)
         try:
             DBSession.flush()
         except IntegrityError:
-            abort(400, detail='Question already exists', passthrough='json')
-        return dict(id=question.id)
-    #
-    # @expose('json')
-    # @authorize
-    # def delete(self, question_id):
+            abort(400, detail='Post already exists', passthrough='json')
+        return dict(id=post.id)
+
+    @expose('json')
+    @authorize
+    def delete(self, post_id):
+        """
+        Delete a post
+
+        :param post_id :type: str
+
+        :return: HttpStatus
+        """
+        try:
+            _id = int(post_id)
+        except ValueError:
+            abort(status_code=400, detail='post_id must be int', passthrough='json')
+        try:
+            post = DBSession.query(Post).filter(Post.id == _id).one()
+            DBSession.delete(post)
+        except NoResultFound:
+            abort(status_code=404, detail='No such post', passthrough='json')
+

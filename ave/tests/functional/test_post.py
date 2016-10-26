@@ -33,6 +33,7 @@ class TestPost(TestController):
         # Posting a valid question
         valid_question = {
             'post_type_id': 1,
+            'parent_id': None,
             'title': 'test',
             'description': 'testing',
             'tags': 'tag,',
@@ -52,11 +53,11 @@ class TestPost(TestController):
         assert_equal(get_resp['views'], [])
         assert_equal(get_resp['tags'], 'tag,')
 
-        # # Delete the question just got
-        # self.app.delete('/posts/%s' % get_resp['id'], headers=make_auth_header())
-        #
-        # # Get the question just deleted
-        # self.app.get('/posts/%s' % get_resp['id'], headers=make_auth_header(), status=404)
+        # Delete the question just got
+        self.app.delete('/posts/%s' % get_resp['id'], headers=make_auth_header())
+        return
+        # Get the question just deleted
+        self.app.get('/posts/%s' % get_resp['id'], headers=make_auth_header(), status=404)
 
         """Blackbox testing"""
         # Get with invalid question_id

@@ -78,7 +78,7 @@ class AccountController(RestController):
     @authorize
     def delete(self, account_id):
         """
-        Delete and Account
+        Delete an Account
 
         :param account_id :type: str
 
