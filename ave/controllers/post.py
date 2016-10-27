@@ -50,8 +50,33 @@ class PostController(RestController):
 
     @expose('json')
     @authorize
+    def get_questions(self, **kw):
+        """
+        Getting the questions between a range
+
+        :param kw: :type: dict
+            {
+                'from': value :type: str
+                'to': value :type: str
+            }
+
+        :return: Json resp containing a list of questions
+        """
+        if sorted(list(kw.keys())) != sorted(['from', 'to']):
+            abort(status_code=400, detail='required keys are not provided', passthrough='json')
+        try:
+            _from = int(kw['from'])
+            to = int(kw['to'])
+        except ValueError:
+            abort(status_code=400, detail='`from` and `to` must be int', passthrough='json')
+        questions = DBSession.query(Post).filter(Post.post_type_id == 1)[_from:to]
+        return dict(questions=questions)
+
+    @expose('json')
+    @authorize
     def post(self):
         """
+
         Adding new post
 
         Getting parameters from tg.request.json

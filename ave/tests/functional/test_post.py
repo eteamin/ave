@@ -58,6 +58,15 @@ class TestPost(TestController):
         # Get the question just deleted
         self.app.get('/posts/%s' % get_resp['id'], headers=make_auth_header(), status=404)
 
+        # Testing get_slice
+        # Posting 20 questions
+        for i in range(20):
+            valid_question['description'] = 'testing%s' % i
+            self.app.post_json('/posts/', params=valid_question, headers=make_auth_header())
+        get_questions_resp = self.app.get('/posts/get_questions', params={'from': 0, 'to': 20}, headers=make_auth_header()).json
+
+        assert_equal(len(get_questions_resp['questions']), 20)
+
         """Blackbox testing"""
         # Get with invalid question_id
         self.app.get('/posts/%s' % 'invalid_id', headers=make_auth_header(), status=400)
