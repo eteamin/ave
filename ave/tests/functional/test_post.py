@@ -58,7 +58,7 @@ class TestPost(TestController):
         # Get the question just deleted
         self.app.get('/posts/%s' % get_resp['id'], headers=make_auth_header(), status=404)
 
-        # Testing get_slice
+        # Testing get_questions
         # Posting 20 questions
         for i in range(20):
             valid_question['description'] = 'testing%s' % i
@@ -70,6 +70,15 @@ class TestPost(TestController):
         """Blackbox testing"""
         # Get with invalid question_id
         self.app.get('/posts/%s' % 'invalid_id', headers=make_auth_header(), status=400)
+
+        # Testing get_questions with invalid params
+        self.app.get('/posts/get_questions', params={'invalid': 0, 'to': 20}, headers=make_auth_header(), status=400)
+        self.app.get(
+            '/posts/get_questions',
+            params={'from': 'zero', 'to': 'twenty'},
+            headers=make_auth_header(),
+            status=400
+        )
 
         # Question dict lacking pairs
         invalid_question = {
@@ -90,8 +99,7 @@ class TestPost(TestController):
         }
         self.app.post_json('/posts/', params=invalid_question2, headers=make_auth_header(), status=400)
 
-        # Trying to violate description uniqueness by posting valid_question twice
-        self.app.post_json('/posts/', params=valid_question, headers=make_auth_header())
+        # Trying to violate description uniqueness by posting valid_question again
         self.app.post_json('/posts/', params=valid_question, headers=make_auth_header(), status=400)
 
         # Invalid json request
