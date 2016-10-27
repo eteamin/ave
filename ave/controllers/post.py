@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 """Question controller module"""
 
+from json import loads
+from json.decoder import JSONDecodeError
+
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
-from tg import expose, abort
+from tg import expose, abort, request
 from tg.controllers.restcontroller import RestController
 
 from ave.model import DBSession, Post
@@ -47,15 +50,16 @@ class PostController(RestController):
 
     @expose('json')
     @authorize
-    def post(self, **kw):
+    def post(self):
         """
         Adding new post
 
-        :param kw :type: dict
+        Getting parameters from tg.request.json
+        :param request.json :type: dict
             {
                 'title': value :type: str
-                'post_type_id': value :type: str
-                'parent_id' value :type: str None if post_type_id == 1
+                'post_type_id': value :type: int
+                'parent_id' value :type: int None if post_type_id == 1
                 'description': value :type: str
                 'account_id': value :type: str
                 'tags': value :type: str None if post_type_id != 1
@@ -63,9 +67,15 @@ class PostController(RestController):
 
         :return HttpStatus
         """
+        try:
+            params = request.json
+            if not isinstance(params, dict):
+                raise ValueError
+        except (JSONDecodeError, ValueError):
+            abort(status_code=400, detail='Request is not in Json format', passthrough='json')
         post = Post()
         if sorted(
-                list(kw.keys())
+                list(params.keys())
         ) != sorted(
                 ['title',
                  'post_type_id',
@@ -75,7 +85,7 @@ class PostController(RestController):
                  'parent_id']
         ):
             abort(400, detail='Required keys are not provided', passthrough='json')
-        for k, v in kw.items():
+        for k, v in params.items():
             setattr(post, k, v)
         DBSession.add(post)
         try:

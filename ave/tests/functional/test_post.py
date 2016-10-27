@@ -3,8 +3,7 @@
 Integration tests for the Question.
 
 """
-
-from nose.tools import eq_, assert_equal, assert_dict_equal
+from nose.tools import eq_, assert_equal
 
 from ave.tests import TestController
 from ave.tests.helpers import make_auth_header, keep_keys
@@ -12,14 +11,14 @@ from ave.tests.helpers import make_auth_header, keep_keys
 
 class TestPost(TestController):
     """
-    Tests for the Question Controller.
+    Tests for the Post Controller.
 
     """
 
     application_under_test = 'main'
 
     def test_question(self):
-        """Question Controller Test"""
+        """Post Controller Test"""
 
         # Posting an account
         account = {
@@ -28,7 +27,7 @@ class TestPost(TestController):
             'email_address': 'test@test.com',
             'bio': 'tester'
         }
-        account_post_resp = self.app.post('/accounts/', params=account, headers=make_auth_header()).json
+        account_post_resp = self.app.post_json('/accounts/', params=account, headers=make_auth_header()).json
 
         # Posting a valid question
         valid_question = {
@@ -39,7 +38,7 @@ class TestPost(TestController):
             'tags': 'tag,',
             'account_id': account_post_resp['id']
         }
-        post_resp = self.app.post('/posts/', params=valid_question, headers=make_auth_header()).json
+        post_resp = self.app.post_json('/posts/', params=valid_question, headers=make_auth_header()).json
         
         # Get the question just posted
         get_resp = self.app.get('/posts/%s' % post_resp['id'], headers=make_auth_header()).json
@@ -55,7 +54,7 @@ class TestPost(TestController):
 
         # Delete the question just got
         self.app.delete('/posts/%s' % get_resp['id'], headers=make_auth_header())
-        return
+
         # Get the question just deleted
         self.app.get('/posts/%s' % get_resp['id'], headers=make_auth_header(), status=404)
 
@@ -65,22 +64,34 @@ class TestPost(TestController):
 
         # Question dict lacking pairs
         invalid_question = {
-            'post_type_id': '1',
+            'post_type_id': 1,
             'title': 'test',
             'tags': 'tag,',
             'account_id': account_post_resp['id']
         }
-        self.app.post('/posts/', params=invalid_question, headers=make_auth_header(), status=400)
+        self.app.post_json('/posts/', params=invalid_question, headers=make_auth_header(), status=400)
 
         # Question with invalid key
         invalid_question2 = {
-            'post_type_id': '1',
+            'post_type_id': 1,
             'invalid_key': 'test',
             'description': 'testing',
             'tags': 'tag,',
             'account_id': account_post_resp['id']
         }
-        self.app.post('/posts/', params=invalid_question2, headers=make_auth_header(), status=400)
+        self.app.post_json('/posts/', params=invalid_question2, headers=make_auth_header(), status=400)
 
-        # Trying to violate description uniqueness by posting valid_question again
-        self.app.post('/posts/', params=valid_question, headers=make_auth_header(), status=400)
+        # Trying to violate description uniqueness by posting valid_question twice
+        self.app.post_json('/posts/', params=valid_question, headers=make_auth_header())
+        self.app.post_json('/posts/', params=valid_question, headers=make_auth_header(), status=400)
+
+        # Invalid json request
+        self.app.post_json('/posts/', params=[], headers=make_auth_header(), status=400)
+
+        # Delete with invalid id
+        self.app.delete('/posts/%s' % 'invalid_id', headers=make_auth_header(), status=400)
+
+        # Delete non-existing id
+        self.app.delete('/posts/%s' % 234352453, headers=make_auth_header(), status=404)
+
+

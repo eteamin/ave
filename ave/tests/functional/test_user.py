@@ -26,14 +26,14 @@ class TestUser(TestController):
             'email_address': 'test@test.com',
             'bio': 'tester'
         }
-        self.app.post('/accounts/', params=valid_account, headers=make_auth_header())
+        self.app.post_json('/accounts/', params=valid_account, headers=make_auth_header())
 
         # login to the account posted
         valid_login = {
             'username': 'test',
             'password': 'test'
         }
-        login_resp = self.app.post('/users/login', params=valid_login, headers=make_auth_header()).json
+        login_resp = self.app.post_json('/users/login', params=valid_login, headers=make_auth_header()).json
         eq_(
             keep_keys(['username', 'bio'], valid_account),
             keep_keys(['username', 'bio'], login_resp)
@@ -45,23 +45,27 @@ class TestUser(TestController):
             'username': 'invalid',
             'password': 'test'
         }
-        self.app.post('/users/login', params=invalid_username, headers=make_auth_header(),  status=400)
+        self.app.post_json('/users/login', params=invalid_username, headers=make_auth_header(),  status=400)
 
         # Invalid password
         invalid_password = {
             'username': 'test',
             'password': 'invalid'
         }
-        self.app.post('/users/login', params=invalid_password, headers=make_auth_header(), status=401)
+        self.app.post_json('/users/login', params=invalid_password, headers=make_auth_header(), status=401)
 
         # Invalid request params
         invalid_login = {
             'username': 'test'
         }
-        self.app.post('/users/login', params=invalid_login, headers=make_auth_header(), status=400)
+        self.app.post_json('/users/login', params=invalid_login, headers=make_auth_header(), status=400)
 
         invalid_login2 = {
             'userrname': 'test',
             'password': 'test'
         }
-        self.app.post('/users/login', params=invalid_login2, headers=make_auth_header(), status=400)
+        self.app.post_json('/users/login', params=invalid_login2, headers=make_auth_header(), status=400)
+
+        # Invalid Json format
+        self.app.post_json('/users/login', params=[], headers=make_auth_header(), status=400)
+

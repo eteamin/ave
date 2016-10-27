@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Login controller"""
+from json.decoder import JSONDecodeError
 
 from sqlalchemy.orm.exc import NoResultFound
-from tg import abort, expose
-from tg.exceptions import HTTPOk
+from tg import abort, expose, request
 from tg.controllers.restcontroller import RestController
 
 from ave.model import DBSession, Account
@@ -16,11 +16,11 @@ class UserController(RestController):
 
     @expose('json')
     @authorize
-    def login(self, **kw):
+    def login(self):
         """
         Logging into account
-
-        :param kw :type: dict
+        Getting parameters from tg.request.json
+        :param request.json :type: dict
             {
                 'username': value :type: str
                 'password': value :type: str
@@ -28,10 +28,17 @@ class UserController(RestController):
 
         :return Account :type: dict or HttpStatus
         """
-        if sorted(list(kw.keys())) != sorted(['username', 'password']):
+        try:
+            params = request.json
+            if not isinstance(params, dict):
+                raise ValueError
+        except (JSONDecodeError, ValueError):
+            abort(status_code=400, detail='Request is not in Json format', passthrough='json')
+
+        if sorted(list(params.keys())) != sorted(['username', 'password']):
             abort(status_code=400, detail='required keys are not provided', passthrough='json')
-        username = kw['username']
-        password = kw['password']
+        username = params['username']
+        password = params['password']
         try:
             user = DBSession.query(Account).filter(Account.username == username).one()
         except NoResultFound:

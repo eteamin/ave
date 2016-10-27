@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """Account controller module"""
+from json.decoder import JSONDecodeError
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
-from tg import expose, abort
+from tg import expose, abort, request
 from tg.controllers.restcontroller import RestController
 
 from ave.model import DBSession, Account
@@ -41,11 +42,12 @@ class AccountController(RestController):
 
     @expose('json')
     @authorize
-    def post(self, **kw):
+    def post(self):
         """
         Adding new account
 
-        :param kw :type: dict
+        Getting parameters from tg.request.json
+        :param request.json :type: dict
             {
                 'username': value :type: str
                 'password': value :type: str
@@ -55,10 +57,17 @@ class AccountController(RestController):
 
         :return HttpStatus
         """
+        try:
+            params = request.json
+            if not isinstance(params, dict):
+                raise ValueError
+        except (JSONDecodeError, ValueError):
+            abort(status_code=400, detail='Request is not in Json format', passthrough='json')
+
         account = Account()
-        if sorted(list(kw.keys())) != sorted(['username', 'password', 'email_address', 'bio']):
+        if sorted(list(params.keys())) != sorted(['username', 'password', 'email_address', 'bio']):
             abort(status_code=400, detail='required keys are not provided', passthrough='json')
-        for k, v in kw.items():
+        for k, v in params.items():
             setattr(account, k, v)
         DBSession.add(account)
         try:
