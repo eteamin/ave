@@ -49,7 +49,7 @@ class PostController(RestController):
         )
 
     @expose('json')
-    @authorize
+    # @authorize
     def get_questions(self, **kw):
         """
         Getting the questions between a range
