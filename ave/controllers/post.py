@@ -49,7 +49,7 @@ class PostController(RestController):
         )
 
     @expose('json')
-    # @authorize
+    @authorize
     def get_questions(self, **kw):
         """
         Getting the questions between a range
@@ -92,24 +92,19 @@ class PostController(RestController):
 
         :return HttpStatus
         """
+        required_params = ['post_type_id', 'account_id', 'description', 'parent_id']
         try:
             params = request.json
             if not isinstance(params, dict):
                 raise ValueError
         except (JSONDecodeError, ValueError):
             abort(status_code=400, detail='Request is not in Json format', passthrough='json')
-        post = Post()
-        if sorted(
-                list(params.keys())
-        ) != sorted(
-                ['title',
-                 'post_type_id',
-                 'account_id',
-                 'description',
-                 'tags',
-                 'parent_id']
-        ):
+        if params['post_type_id'] == 1:
+            required_params.append('title')
+            required_params.append('tags')
+        if sorted(list(params.keys())) != sorted(required_params):
             abort(400, detail='Required keys are not provided', passthrough='json')
+        post = Post()
         for k, v in params.items():
             setattr(post, k, v)
         DBSession.add(post)

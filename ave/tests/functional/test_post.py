@@ -18,7 +18,7 @@ class TestPost(TestController):
     application_under_test = 'main'
 
     def test_question(self):
-        """Post Controller Test"""
+        """Question Posting"""
 
         # Posting an account
         account = {
@@ -42,15 +42,10 @@ class TestPost(TestController):
         
         # Get the question just posted
         get_resp = self.app.get('/posts/%s' % post_resp['id'], headers=make_auth_header()).json
-        eq_(
-            keep_keys(['post_type_id', 'title', 'description'], get_resp),
-            keep_keys(['post_type_id', 'title', 'description'], valid_question)
-        )
+        assert_equal(keep_keys(list(valid_question.keys()), get_resp), valid_question)
         assert_equal(account['username'], get_resp['username'])
-        assert_equal(get_resp['parent_id'], None)
         assert_equal(get_resp['votes'], [])
         assert_equal(get_resp['views'], [])
-        assert_equal(get_resp['tags'], 'tag,')
 
         # Delete the question just got
         self.app.delete('/posts/%s' % get_resp['id'], headers=make_auth_header())
@@ -110,5 +105,39 @@ class TestPost(TestController):
 
         # Delete non-existing id
         self.app.delete('/posts/%s' % 234352453, headers=make_auth_header(), status=404)
+
+    def test_answer(self):
+        """AnswerPosting"""
+        # Posting an account and a question
+        account = {
+            'username': 'test',
+            'password': 'test',
+            'email_address': 'test@test.com',
+            'bio': 'tester'
+        }
+        account_post_resp = self.app.post_json('/accounts/', params=account, headers=make_auth_header()).json
+        valid_question = {
+            'post_type_id': 1,
+            'parent_id': None,
+            'title': 'test',
+            'description': 'testing',
+            'tags': 'tag,',
+            'account_id': account_post_resp['id']
+        }
+        question_post_resp = self.app.post_json('/posts/', params=valid_question, headers=make_auth_header()).json
+
+        # Posting a valid answer
+        valid_answer = {
+            'post_type_id': 2,
+            'parent_id': question_post_resp['id'],
+            'description': 'this is an answer',
+            'account_id': account_post_resp['id']
+
+        }
+        answer_post_resp = self.app.post_json('/posts/', params=valid_answer, headers=make_auth_header()).json
+
+        # Get the answer just posted
+        answer_get_resp = self.app.get('/posts/', headers=make_auth_header()).json
+        assert_equal(keep_keys(list(valid_answer.keys()), answer_get_resp), valid_answer)
 
 
