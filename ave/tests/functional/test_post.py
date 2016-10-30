@@ -137,7 +137,39 @@ class TestPost(TestController):
         answer_post_resp = self.app.post_json('/posts/', params=valid_answer, headers=make_auth_header()).json
 
         # Get the answer just posted
-        answer_get_resp = self.app.get('/posts/', headers=make_auth_header()).json
+        answer_get_resp = self.app.get('/posts/%s' % answer_post_resp['id'], headers=make_auth_header()).json
         assert_equal(keep_keys(list(valid_answer.keys()), answer_get_resp), valid_answer)
+
+        # Delete the answer just posted
+        self.app.delete('/posts/%s' % answer_get_resp['id'], headers=make_auth_header())
+
+        """Going blackbox"""
+
+        # Get the answer just deleted
+        self.app.get('/posts/%s' % answer_get_resp['id'], headers=make_auth_header(), status=404)
+
+        # Delete the answer again
+        self.app.delete('/posts/%s' % answer_get_resp['id'], headers=make_auth_header(), status=404)
+
+        # Posting an invalid question missing a key
+        invalid_answer = {
+            'post_type_id': 2,
+            'description': 'this is an answer',
+            'account_id': account_post_resp['id']
+        }
+        self.app.post_json('/posts/', params=invalid_answer, headers=make_auth_header(), status=400)
+
+        # Typo in keys
+        invalid_answer2 = {
+            'post_type_id': 2,
+            'parent_id': question_post_resp['id'],
+            'descriptin': 'this is an answer',
+            'account_id': account_post_resp['id']
+
+        }
+        self.app.post_json('/posts/', params=invalid_answer2, headers=make_auth_header(), status=400)
+
+
+
 
 

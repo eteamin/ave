@@ -43,9 +43,10 @@ class PostController(RestController):
             edit_date=post.edit_date,
             post_type_id=post.post_type_id,
             username=post.account.username,
-            votes=post.votes,
-            views=post.views,
-            tags=post.tags
+            account_id=post.account.id,
+            votes=post.votes if post.post_type_id == 1 else None,
+            views=post.views if post.post_type_id == 1 else None,
+            tags=post.tags if post.post_type_id == 1 else None
         )
 
     @expose('json')
